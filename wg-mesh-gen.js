@@ -11,6 +11,7 @@ const DEFAULT_WG_MTU = 1440;
 const WG_TUNNEL_PREFIX = '192.168.76.'; 
 const WG_INTERFACE_MASK = 24;           // Local interface subnet mask (/24)
 const WG_INTERFACE_NAME = 'wgDawn';
+const DEFAULT_DAWN_NETWORK_SECTION = 'network1'; // Dawn network config value
 // ==========================================
 
 const args = process.argv.slice(2);
@@ -150,7 +151,14 @@ if (command === 'config') {
                 config_value: peer.hostname,
                 ipv4: peer.wg_tunnel_ip,
                 port: String(peer.dawn_port)
-            }))
+            })),
+            dawn: [
+                {
+                    config_name: "network",
+                    config_value: DEFAULT_DAWN_NETWORK_SECTION,
+                    tcp_ip: currentNode.wg_tunnel_ip
+                }
+            ]
         };
 
         fs.writeFileSync(configFileName, JSON.stringify(configJson, null, 4));
